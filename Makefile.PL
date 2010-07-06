@@ -25,11 +25,10 @@ my %WriteMakefileArgs = (
                        'EXE_FILES' => [
                                         'bin/starbucksloginator'
                                       ],
-                       'VERSION' => '0.0010',
+                       'VERSION' => '0.0011',
                        'PREREQ_PM' => {
                                         'Getopt::Long' => '0',
                                         'WWW::Mechanize' => '0',
-                                        'Config::Identity' => '0.0014',
                                         'Getopt::Usaginator' => '0'
                                       },
                        'LICENSE' => 'perl'
