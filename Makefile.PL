@@ -4,43 +4,43 @@ use warnings;
 
 
 
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
 my %WriteMakefileArgs = (
-                       'test' => {
-                                   'TESTS' => 't/*.t'
-                                 },
-                       'NAME' => 'App::starbucksloginator',
-                       'DISTNAME' => 'App-starbucksloginator',
-                       'CONFIGURE_REQUIRES' => {
-                                                 'ExtUtils::MakeMaker' => '6.31'
-                                               },
-                       'AUTHOR' => 'Robert Krimen <robertkrimen@gmail.com>',
-                       'BUILD_REQUIRES' => {
-                                             'Test::Most' => '0'
-                                           },
-                       'ABSTRACT' => 'Access the wireless at Starbucks (via AT&T)',
-                       'EXE_FILES' => [
-                                        'bin/starbucksloginator'
-                                      ],
-                       'VERSION' => '0.0011',
-                       'PREREQ_PM' => {
-                                        'Getopt::Long' => '0',
-                                        'WWW::Mechanize' => '0',
-                                        'Getopt::Usaginator' => '0'
-                                      },
-                       'LICENSE' => 'perl'
-                     );
+  "ABSTRACT" => "Access the wireless at Starbucks (via AT&T)",
+  "AUTHOR" => "Robert Krimen <robertkrimen\@gmail.com>",
+  "BUILD_REQUIRES" => {
+    "Test::Most" => 0
+  },
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
+  },
+  "DISTNAME" => "App-starbucksloginator",
+  "EXE_FILES" => [
+    "bin/starbucksloginator"
+  ],
+  "LICENSE" => "perl",
+  "NAME" => "App::starbucksloginator",
+  "PREREQ_PM" => {
+    "Getopt::Long" => 0,
+    "Getopt::Usaginator" => 0,
+    "WWW::Mechanize" => 0
+  },
+  "VERSION" => "0.0012",
+  "test" => {
+    "TESTS" => "t/*.t"
+  }
+);
 
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
   my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
-  my $pp = $WriteMakefileArgs{PREREQ_PM}; 
+  my $pp = $WriteMakefileArgs{PREREQ_PM};
   for my $mod ( keys %$br ) {
     if ( exists $pp->{$mod} ) {
-      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod}; 
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
     }
     else {
       $pp->{$mod} = $br->{$mod};

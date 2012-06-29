@@ -1,6 +1,6 @@
 package App::starbucksloginator;
-BEGIN {
-  $App::starbucksloginator::VERSION = '0.0011';
+{
+  $App::starbucksloginator::VERSION = '0.0012';
 }
 # ABSTRACT: Access the wireless at Starbucks (via AT&T)
 
@@ -22,10 +22,21 @@ my $__agent__ = WWW::Mechanize->new;
 $__agent__->agent( "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6" );
 sub agent { $__agent__ }
 
-sub try_google {
+sub try {
     my $self = shift;
-    my $response = agent->get( 'http://google.com' );
-    my $success = $response->decoded_content =~ m/<title>[^<]*Google.*?</i;
+    my $site = shift;
+    my $response = agent->get( "http://$site" );
+    my $success = $response->decoded_content !~ m/<title>[^<]*Starbucks.*?</i;
+    return ( $success, $response );
+}
+
+sub try_to_get_out {
+    my $self = shift;
+    my ( $success, $response );
+    for my $site ( qw/ google.com example.com bing.com yahoo.com / ) {
+        ( $success, $response ) = $self->try( $site );
+        return ( $success, $response ) unless $success;
+    }
     return ( $success, $response );
 }
 
@@ -51,14 +62,14 @@ sub run {
     agent->agent( $agent ) if defined $agent;
 
     my ( $connected, $response );
-    ( $connected, $response ) = $self->try_google;
+    ( $connected, $response ) = $self->try_to_get_out;
 
     if ( $connected ) { 
-        say "It looks like you can already get out to Google -- Cancelling login";
+        say "It looks like you can already get out -- Cancelling login";
         exit 0;
     }
     else {
-        say "Unable to connect to Google -- Attempting to login";
+        say "Unable to get out -- Attempting to login";
     }
 
     if ( agent->form_number( 1 ) ) {
@@ -75,14 +86,14 @@ sub run {
         exit -1;
     }
 
-    ( $connected ) = $self->try_google;
+    ( $connected ) = $self->try_to_get_out;
 
     if ( $connected ) {
-        say "Connected to Google -- Login successful";
+        say "Connected -- Login successful";
         exit 0;
     }
 
-    say "Unable to connect to Google -- Login failed";
+    say "Unable to get out -- Login failed";
     print $response->as_string;
     exit -1;
 }
@@ -98,7 +109,7 @@ App::starbucksloginator - Access the wireless at Starbucks (via AT&T)
 
 =head1 VERSION
 
-version 0.0011
+version 0.0012
 
 =head1 SYNOPSIS
 
@@ -119,11 +130,11 @@ version 0.0011
 
 =head1 AUTHOR
 
-  Robert Krimen <robertkrimen@gmail.com>
+Robert Krimen <robertkrimen@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Robert Krimen.
+This software is copyright (c) 2012 by Robert Krimen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
